@@ -1,6 +1,8 @@
 .env
 data/*
 !data/.gitkeep
-token.json
+*_token.json
 __pycache__/
 test*
+venv
+myproject*

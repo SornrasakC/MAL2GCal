@@ -6,13 +6,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 CLIENT_ID, CLIENT_SECRET = environ['CLIENT_ID'], environ['CLIENT_SECRET']
-TOKEN_PATH = "data/token.json"
+TOKEN_PATH = "data/mal_token.json"
 
-def read_token():
+def mal_read_token():
     try:
         return json.load(open(TOKEN_PATH))
     except:
-        raise Exception('Run scripts/generate_token.py first!')
+        raise Exception('Run scripts/mal_generate_token.py first!')
 
 
 # 1. Generate a new Code Verifier / Code Challenge.
@@ -68,7 +68,7 @@ def _print_user_info(access_token: str):
     print(f"\n>>> Greetings {user['name']}! <<<")
 
 
-def generate_new_token():
+def mal_generate_new_token():
     code_verifier = code_challenge = _get_new_code_verifier()
     _print_new_authorisation_url(code_challenge)
 
@@ -79,7 +79,7 @@ def generate_new_token():
     _print_user_info(token['access_token'])
 
 
-def refresh_token() -> dict:
+def mal_refresh_token() -> dict:
     url = 'https://myanimelist.net/v1/oauth2/token'
     old_token = json.load(open(TOKEN_PATH))
     data = {
@@ -104,4 +104,4 @@ def refresh_token() -> dict:
 
 
 if __name__ == '__main__':
-    generate_new_token()
+    mal_generate_new_token()
