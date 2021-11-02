@@ -1,8 +1,8 @@
 import json
 import requests
+from utils import read_token
 
-access_token = json.load(open('token.json'))['access_token']
-headers = {'Authorization': f'Bearer {access_token}'}
+headers = {'Authorization': f'Bearer {read_token()["access_token"]}'}
 
 BASE_URL = 'https://api.myanimelist.net/v2'
 
@@ -19,7 +19,7 @@ def api_all_watching_ids():
     }
 
     url = f'{BASE_URL}/users/@me/animelist?{_parse(params)}'
-    res = requests.get(url)
+    res = requests.get(url, headers=headers)
     data = res.json()['data']
 
     return [d['node']['id'] for d in data]
@@ -31,7 +31,7 @@ def api_anime_detail(id):
     }
 
     url = f'{BASE_URL}/anime/{id}?{_parse(params)}'
-    res = requests.get(url)
+    res = requests.get(url, headers=headers)
     data = res.json()
 
     return data

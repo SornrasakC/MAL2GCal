@@ -1,3 +1,6 @@
 .env
+data/*
+!data/.gitkeep
 token.json
 __pycache__/
+test*

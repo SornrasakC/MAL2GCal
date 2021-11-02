@@ -5,9 +5,17 @@ from os import environ
 from dotenv import load_dotenv
 load_dotenv()
 
+CLIENT_ID, CLIENT_SECRET = environ['CLIENT_ID'], environ['CLIENT_SECRET']
+TOKEN_PATH = "data/token.json"
+
+def read_token():
+    try:
+        return json.load(open(TOKEN_PATH))
+    except:
+        raise Exception('Run scripts/generate_token.py first!')
+
+
 # 1. Generate a new Code Verifier / Code Challenge.
-
-
 def _get_new_code_verifier() -> str:
     token = secrets.token_urlsafe(100)
     return token[:128]
@@ -15,8 +23,6 @@ def _get_new_code_verifier() -> str:
 
 # 2. Print the URL needed to authorise your application.
 def _print_new_authorisation_url(code_challenge: str):
-    CLIENT_ID = environ['CLIENT_ID']
-
     url = f'https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id={CLIENT_ID}&code_challenge={code_challenge}'
     print(f'Authorise your application by clicking here: {url}\n')
 
@@ -25,8 +31,6 @@ def _print_new_authorisation_url(code_challenge: str):
 #    specified in the API panel. The URL will contain a parameter named "code" (the Authorisation
 #    Code). You need to feed that code to the application.
 def _generate_new_token(authorisation_code: str, code_verifier: str) -> dict:
-    CLIENT_ID, CLIENT_SECRET = environ['CLIENT_ID'], environ['CLIENT_SECRET']
-
     url = 'https://myanimelist.net/v1/oauth2/token'
     data = {
         'client_id': CLIENT_ID,
@@ -43,9 +47,9 @@ def _generate_new_token(authorisation_code: str, code_verifier: str) -> dict:
     response.close()
     print('Token generated successfully!')
 
-    with open('token.json', 'w', encoding='utf-8') as file:
+    with open(TOKEN_PATH, 'w', encoding='utf-8') as file:
         json.dump(token, file, indent=4)
-        print('Token saved in "token.json"')
+        print(f'Token saved in "{TOKEN_PATH}"')
 
     return token
 
@@ -77,7 +81,7 @@ def generate_new_token():
 
 def refresh_token() -> dict:
     url = 'https://myanimelist.net/v1/oauth2/token'
-    old_token = json.load(open('token.json'))
+    old_token = json.load(open(TOKEN_PATH))
     data = {
         'client_id': environ['CLIENT_ID'],
         'client_secret': environ['CLIENT_SECRET'],
@@ -92,9 +96,9 @@ def refresh_token() -> dict:
     response.close()
     print('Refresh Token successfully!')
 
-    with open('token.json', 'w') as file:
+    with open(TOKEN_PATH, 'w') as file:
         json.dump(token, file, indent=4)
-        print('Refreshed Token saved in "token.json"')
+        print(f'Refreshed Token saved in "{TOKEN_PATH}"')
 
     return token
 
