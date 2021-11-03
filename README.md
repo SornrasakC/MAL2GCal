@@ -13,3 +13,7 @@ Import MyAnimeList (MAL) watching list to Google Calendar
 6. Try ```py .\scripts\validate.py```, if some links showed up, just follow. (It's to enable Calendar API)
 7. Profits ```py .\scripts\main.py``` 
 8. (Optional) remember to ```py .\scripts\refresh.py``` after at least one hour has passed.
+
+### Subsequent usage
+
+Can use [after.bat](https://github.com/SornrasakC/MAL2GCal/blob/main/after.bat) instead.
