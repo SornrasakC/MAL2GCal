@@ -31,6 +31,9 @@ def _print_new_authorisation_url(code_challenge: str):
 #    specified in the API panel. The URL will contain a parameter named "code" (the Authorisation
 #    Code). You need to feed that code to the application.
 def _generate_new_token(authorisation_code: str, code_verifier: str) -> dict:
+    if not CLIENT_ID:
+        raise Exception('Checkout .env.example')
+        
     url = 'https://myanimelist.net/v1/oauth2/token'
     data = {
         'client_id': CLIENT_ID,

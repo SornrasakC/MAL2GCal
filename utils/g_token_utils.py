@@ -48,6 +48,9 @@ def enable_stout(o_stdout, o_file):
 
 
 def g_generate_new_token():
+    if not CLIENT_ID:
+        raise Exception('Checkout .env.example')
+
     SCOPE = 'https://www.googleapis.com/auth/calendar'
     REDIRECT_URI = 'http://localhost/oauth'
 
@@ -83,7 +86,7 @@ def g_refresh_token():
         user_agent=None,
         revoke_uri=GOOGLE_REVOKE_URI)
 
-    credentials.refresh(httplib2.Http())  # refresh the access token (optional)
+    credentials.refresh(httplib2.Http())  # refresh the access token (not optional)
     new_token = json.loads(credentials.to_json())
 
     with open(TOKEN_PATH, 'w') as file:
