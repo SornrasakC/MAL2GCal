@@ -1,5 +1,5 @@
 # MAL2GCal
-<!-- ![image](https://user-images.githubusercontent.com/43643389/140039601-90375f78-24a9-47c7-926d-b440d18cd504.png) -->
+![image](https://user-images.githubusercontent.com/43643389/140039601-90375f78-24a9-47c7-926d-b440d18cd504.png)
 
 ## How to use
 
