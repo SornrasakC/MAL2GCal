@@ -3,6 +3,7 @@ from utils import mal_read_token
 from collections import namedtuple
 
 headers = {'Authorization': f'Bearer {mal_read_token()["access_token"]}'}
+# headers = {'X-MAL-CLIENT-ID': MAL_CLIENT_ID} // TODO change method to this https://myanimelist.net/forum/?topicid=1973077
 
 BASE_URL = 'https://api.myanimelist.net/v2'
 
