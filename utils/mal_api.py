@@ -1,5 +1,6 @@
 import requests
 from utils import mal_read_token
+from collections import namedtuple
 
 headers = {'Authorization': f'Bearer {mal_read_token()["access_token"]}'}
 
@@ -9,12 +10,13 @@ BASE_URL = 'https://api.myanimelist.net/v2'
 def _parse(params):
     return '&'.join(f'{k}={v}' for k, v in params.items())
 
+STATUS = namedtuple('Status', "W P")(W='watching', P='plan_to_watch')
 
-def mal_api_all_watching_ids():
+def _mal_api_all_status_ids(status):
     params = {
         'fields': '',
         'limit': '1000',
-        'status': 'watching'
+        'status': status
     }
 
     url = f'{BASE_URL}/users/@me/animelist?{_parse(params)}'
@@ -22,6 +24,13 @@ def mal_api_all_watching_ids():
     data = res.json()['data']
 
     return [d['node']['id'] for d in data]
+
+def mal_api_all_watching_ids():
+    return _mal_api_all_status_ids(STATUS.W)
+
+
+def mal_api_all_plan_ids():
+    return _mal_api_all_status_ids(STATUS.P)
 
 
 def mal_api_anime_detail(id):

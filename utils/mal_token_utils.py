@@ -1,8 +1,11 @@
 import json
 import requests
 import secrets
+import os
+import time
 from os import environ
 from dotenv import load_dotenv
+from utils.fastapi.instance import start_server_thread
 load_dotenv()
 
 CLIENT_ID, CLIENT_SECRET = environ['CLIENT_ID'], environ['CLIENT_SECRET']
@@ -71,7 +74,37 @@ def _print_user_info(access_token: str):
     print(f"\n>>> Greetings {user['name']}! <<<")
 
 
+def _wait_for_auth_code():
+    AUTH_CODE_PATH = 'data/mal_auth_code.txt'
+    for i in range(120):
+        if os.path.exists(AUTH_CODE_PATH):
+            break
+        print(f'\r\t Waiting for auth code, authorize before ({i} / 120 secs)', end='')
+        time.sleep(1)
+    print()
+
+    if not os.path.exists(AUTH_CODE_PATH):
+        input('Press Enter to retry')
+        return _wait_for_auth_code()
+    #     raise Exception('No Auth Code')
+
+    with open(AUTH_CODE_PATH, encoding='utf-8') as f:
+        authorisation_code = f.read()
+    os.remove(AUTH_CODE_PATH)
+    return authorisation_code
+
 def mal_generate_new_token():
+    with start_server_thread():
+        code_verifier = code_challenge = _get_new_code_verifier()
+        _print_new_authorisation_url(code_challenge)
+        authorisation_code = _wait_for_auth_code()
+        
+        token = _generate_new_token(authorisation_code, code_verifier)
+
+    _print_user_info(token['access_token'])
+
+# deprecated
+def __mal_generate_new_token():
     code_verifier = code_challenge = _get_new_code_verifier()
     _print_new_authorisation_url(code_challenge)
 

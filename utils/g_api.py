@@ -48,6 +48,16 @@ def g_api_list_cal_events(calendar_id):
 def g_api_create_anime_event(calendar_id, anime_info):
     url = f"{BASE_URL}/calendars/{calendar_id}/events"
 
+    if 'start_date' not in anime_info:
+        print(f"WARN: Missing Start Date: {anime_info['title']}")
+        return False
+
+    if len(anime_info['start_date'].split('-')) != 3:
+        print(f"WARN: Vague Start Date: {anime_info['title']}, {anime_info['start_date']}")
+        return False
+
+    repeat = (int(anime_info["num_episodes"]) or 12) - 1
+
     body = {
         "summary": anime_info["title"],
         "start": {
@@ -57,9 +67,12 @@ def g_api_create_anime_event(calendar_id, anime_info):
             "date": anime_info["start_date"],
         },
         "recurrence": [
-            f'RRULE:FREQ=WEEKLY;COUNT={(int(anime_info["num_episodes"]) or 12) - 1}'
+            f'RRULE:FREQ=WEEKLY;COUNT={repeat}'
         ],
     }
+
+    if int(anime_info["num_episodes"]) == 1:
+        del body['recurrence']
 
     res = requests.post(url, json=body, headers=headers)
 

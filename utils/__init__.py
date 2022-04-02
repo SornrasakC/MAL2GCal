@@ -7,6 +7,7 @@ from utils.mal_token_utils import (
 )
 from utils.mal_api import (
     mal_api_all_watching_ids,
+    mal_api_all_plan_ids,
     mal_api_anime_detail,
     mal_api_batch_anime_detail,
 )
@@ -22,7 +23,15 @@ from utils.g_api import (
 )
 
 
-def create_anime_lists():
+def create_anime_plan_lists():
+    ids = mal_api_all_plan_ids()
+    details = mal_api_batch_anime_detail(ids)
+
+    with open("data/anime_lists.json", "w") as f:
+        json.dump(details, f, indent=4)
+
+
+def create_anime_watching_lists():
     ids = mal_api_all_watching_ids()
     details = mal_api_batch_anime_detail(ids)
 
