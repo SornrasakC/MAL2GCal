@@ -15,3 +15,5 @@ SET py=.\%venv%\Scripts\python
 %py% .\scripts\mal_generate_token.py
 
 %py% .\scripts\g_generate_token.py
+
+%py% .\scripts\validate.py
