@@ -32,7 +32,7 @@ def g_read_token():
     try:
         return json.load(open(TOKEN_PATH))
     except:
-        raise Exception('Run scripts/g_generate_token.py first!')
+        raise Exception('Run scripts/optionals/g_generate_token.py first!')
 
 
 def disable_stout():

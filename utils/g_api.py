@@ -2,7 +2,8 @@ import requests
 import json
 from utils import g_read_token
 
-headers = {"Authorization": f'Bearer {g_read_token()["access_token"]}'}
+# headers = 
+get_headers = lambda: {'Authorization': f'Bearer {g_read_token()["access_token"]}'}
 
 BASE_URL = "https://www.googleapis.com/calendar/v3"
 
@@ -13,7 +14,7 @@ def _parse(params):
 
 def g_api_create_calendar():
     url = f"{BASE_URL}/calendars"
-    res = requests.post(url, json={"summary": "MAL2GCal"}, headers=headers)
+    res = requests.post(url, json={"summary": "MAL2GCal"}, headers=get_headers())
 
     return None
 
@@ -22,7 +23,7 @@ def g_api_mal_calendar_id():
     params = {"minAccessRole": "owner"}
 
     url = f"{BASE_URL}/users/me/calendarList?{_parse(params)}"
-    res = requests.get(url, headers=headers)
+    res = requests.get(url, headers=get_headers())
     data = res.json()["items"]
 
     target_cal = [cal["id"] for cal in data if "MAL2GCal" in cal["summary"]]
@@ -38,7 +39,7 @@ def g_api_list_cal_events(calendar_id):
     params = {"maxResults": 2500}
 
     url = f"{BASE_URL}/calendars/{calendar_id}/events?{_parse(params)}"
-    res = requests.get(url, headers=headers)
+    res = requests.get(url, headers=get_headers())
 
     data = res.json()["items"]
 
@@ -74,7 +75,7 @@ def g_api_create_anime_event(calendar_id, anime_info):
     if int(anime_info["num_episodes"]) == 1:
         del body['recurrence']
 
-    res = requests.post(url, json=body, headers=headers)
+    res = requests.post(url, json=body, headers=get_headers())
 
     return None
 

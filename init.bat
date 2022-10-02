@@ -12,8 +12,8 @@ SET py=.\%venv%\Scripts\python
 @REM Enable sibling module import
 %pip% install -e .
 
-%py% .\scripts\mal_generate_token.py
+%py% .\scripts\optionals\mal_generate_token.py
 
-%py% .\scripts\g_generate_token.py
+%py% .\scripts\optionals\g_generate_token.py
 
 %py% .\scripts\validate.py

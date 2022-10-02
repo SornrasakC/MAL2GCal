@@ -5,6 +5,7 @@ import os
 import time
 from os import environ
 from dotenv import load_dotenv
+
 from utils.fastapi.instance import start_server_thread
 load_dotenv()
 
@@ -14,8 +15,8 @@ TOKEN_PATH = "data/mal_token.json"
 def mal_read_token():
     try:
         return json.load(open(TOKEN_PATH))
-    except:
-        raise Exception('Run scripts/mal_generate_token.py first!')
+    except Exception:
+        raise Exception('Run scripts/optionals/mal_generate_token.py first!')
 
 
 # 1. Generate a new Code Verifier / Code Challenge.
