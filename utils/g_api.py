@@ -82,7 +82,7 @@ def g_api_create_anime_event(calendar_id, anime_info):
 
 def g_api_batch_create_anime_event(calendar_id, anime_infos):
     events = g_api_list_cal_events(calendar_id)
-    names = set(e["summary"] for e in events)
+    names = set(e.get('summary', 'MISSING') for e in events)
 
     for anime_info in anime_infos:
         if anime_info["title"] in names:
